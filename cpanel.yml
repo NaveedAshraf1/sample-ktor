@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOY_DIR=$HOME/path_to_your_deployment_directory
+    - export DEPLOY_DIR=$HOME/bhjobapp
     - echo "Starting deployment..."
 
     # Check if Java is installed
