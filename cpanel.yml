@@ -1,0 +1,30 @@
+---
+deployment:
+  tasks:
+    - export DEPLOY_DIR=$HOME/path_to_your_deployment_directory
+    - echo "Starting deployment..."
+
+    # Check if Java is installed
+    - if ! type -p java; then
+      echo "Java not found, installing Java...";
+      sudo yum install -y java-1.8.0-openjdk;
+      else
+      echo "Java is already installed";
+      fi
+
+    # Pull the latest code from the repository
+    - /bin/bash -c 'source $HOME/.bash_profile && cd $DEPLOY_DIR && git pull origin master'
+
+    # Stop any running instances of the application
+    - echo "Stopping any running instances of the application..."
+    - pkill -f 'java -jar your-application.jar' || echo "No running application found."
+
+    # Build the application (if applicable, e.g., using Gradle or Maven)
+    - echo "Building the application..."
+    - /bin/bash -c 'cd $DEPLOY_DIR && ./gradlew build' # or `mvn clean package` for Maven
+
+    # Start a new instance of the application
+    - echo "Starting new instance of the application..."
+    - nohup java -jar $DEPLOY_DIR/build/libs/your-application.jar &
+
+    - echo "Deployment finished."
